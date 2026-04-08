@@ -6,13 +6,13 @@
  function sendTokenToServer(pushToken) {
     const tempKey = getOrCreateTempKey();
 
-    $.post(
-        'save_token_proc.php',
+    $.get(
+        'save_token_proc.php',JSON.stringify(
         {
             fcm_token: pushToken,
             device_type: 'android',
             temp_key: tempKey
-        }
+        })
         , function(res){
 
         }
