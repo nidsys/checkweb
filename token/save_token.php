@@ -6,17 +6,46 @@
  function sendTokenToServer(pushToken) {
     const tempKey = getOrCreateTempKey();
 
-    $.get(
-        'save_token_proc.php',JSON.stringify(
-        {
+     $.ajax({
+        url: 'save_token_proc.php',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
             fcm_token: pushToken,
             device_type: 'android',
             temp_key: tempKey
-        })
-        , function(res){
-
+        }),
+        success: function(res) {
+            console.log('토큰 저장 성공:', res);
+        },
+        error: function(err) {
+            console.error('토큰 저장 실패:', err);
         }
-    )
+    });
+
+     // $.get(
+     //    'save_token_proc.php',JSON.stringify(
+     //    {
+     //        fcm_token: pushToken,
+     //        device_type: 'android',
+     //        temp_key: tempKey
+     //    })
+     //    , function(res){
+ 
+     //    }
+     //)
+    
+    // $.get(
+    //     'save_token_proc.php',JSON.stringify(
+    //     {
+    //         fcm_token: pushToken,
+    //         device_type: 'android',
+    //         temp_key: tempKey
+    //     })
+    //     , function(res){
+
+    //     }
+    // )
 }
 sendTokenToServer('<?= $_REQUEST['fcm_token']??'' ?>');
 </script>
