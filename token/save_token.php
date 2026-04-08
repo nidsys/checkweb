@@ -1,3 +1,14 @@
+<?php
+
+
+// ⭐ 1. 요청 본문(raw data) 전체를 가져옵니다. ⭐
+$json_data = file_get_contents('php://input');
+
+// ⭐ 2. JSON 문자열을 PHP 배열/객체로 디코딩합니다. ⭐
+$data = json_decode($json_data, true);
+
+
+?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="../assets/js/randkey.js"></script>
 
@@ -47,5 +58,5 @@
     //     }
     // )
 }
-sendTokenToServer('<?= $_REQUEST['fcm_token']??'' ?>');
+sendTokenToServer('<?= $data['fcm_token']??'' ?>');
 </script>
