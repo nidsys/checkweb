@@ -1,42 +1,23 @@
-<?php
-error_reporting(E_ALL);
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="assets/js/app.js"></script>
 
-ini_set('display_errors', '1');
+<script>
+// 앱 실행 후 푸시 토큰 받으면 서버로 전송
+async function sendTokenToServer(pushToken) {
+    const tempKey = getOrCreateTempKey();
 
-header('Content-Type: application/json');
+    const response = await fetch('save_token_proc.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            fcm_token: pushToken,
+            device_type: 'android', // 또는 'ios'
+            temp_key: tempKey
+        })
+    });
 
-require_once __DIR__. "/../config.php";
-require_once __DIR__. "/../includes/db.php";
-
-$db = getDB();
-
-// ⭐ 1. 요청 본문(raw data) 전체를 가져옵니다. ⭐
-$json_data = file_get_contents('php://input');
-
-// ⭐ 2. JSON 문자열을 PHP 배열/객체로 디코딩합니다. ⭐
-$data = json_decode($json_data, true);
-
-
-$fp = fopen("log.txt","a+");
-$r = print_r($data, true);
-fwrite($fp, "\n".$_SERVER['REMOTE_ADDR']."\n".$r);
-fclose($fp);
-
-if(empty($data['fcm_token'])) $data['fcm_token'] = "";
-
-$sql = "SELECT id FROM fcm_token where fcm_token='{$data['fcm_token']}'";
-$duple = $db->query($sql)->fetchAll();
-if(empty($duple[0]['id'])) {
-    $sql= "insert into fcm_token set
-        fcm_token='{$data['fcm_token']}',
-        user_id=0,
-        created_at=now()
-    ";
-    $db->query($sql);
-}else{
-    $sql= "update fcm_token set
-        created_at=now()
-        where id={$duple[0]['id']}
-    ";
-    $db->query($sql);
+    const result = await response.json();
+    console.log(result);
 }
+sendTokenToServer('<?= $_REQUEST['fcm_token']??'' ?>');
+</script>

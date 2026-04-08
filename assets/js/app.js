@@ -566,3 +566,17 @@ $(function () {
     }, 30000);
 
 });
+
+function getOrCreateTempKey() {
+    let tempKey = localStorage.getItem('temp_key');
+    
+    if (!tempKey) {
+        // 없으면 새로 생성
+        tempKey = crypto.randomUUID(); // 예: "550e8400-e29b-41d4-a716-446655440000"
+        localStorage.setItem('temp_key', tempKey);
+    }
+    
+    return tempKey;
+}
+
+const tempKey = getOrCreateTempKey();
