@@ -578,5 +578,3 @@ function getOrCreateTempKey() {
     
     return tempKey;
 }
-
-const tempKey = getOrCreateTempKey();

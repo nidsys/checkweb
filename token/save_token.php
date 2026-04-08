@@ -3,21 +3,20 @@
 
 <script>
 // 앱 실행 후 푸시 토큰 받으면 서버로 전송
-async function sendTokenToServer(pushToken) {
+ function sendTokenToServer(pushToken) {
     const tempKey = getOrCreateTempKey();
 
-    const response = await fetch('save_token_proc.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+    $.post(
+        'save_token_proc.php',
+        {
             fcm_token: pushToken,
-            device_type: 'android', // 또는 'ios'
+            device_type: 'android',
             temp_key: tempKey
-        })
-    });
+        }
+        , function(res){
 
-    const result = await response.json();
-    console.log(result);
+        }
+    )
 }
 sendTokenToServer('<?= $_REQUEST['fcm_token']??'' ?>');
 </script>
