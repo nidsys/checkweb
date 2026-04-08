@@ -18,12 +18,12 @@ $sql = "SELECT * FROM fcm_token where 1";
 $tokenLists = $pdo->query($sql)->fetchAll();
 
 //
-$sql = "SELECT * FROM error_log where sendyn='n'";
+$sql = "SELECT * FROM error_logs where sendyn='n'";
 $errorlogs = $pdo->query($sql)->fetchAll();
 
 foreach($errorlogs as $errlog) {
-    $title = $errlog['check_type'];
-    $body = $errlog['target']."\n".$errlog['error_detail'];
+    $title = $errlog['site_name'];
+    $body = $errlog['error_message']."\n".$errlog['condition_detail'];
     
     $accessToken = getAccessToken($serviceAccountPath, 'https://www.googleapis.com/auth/firebase.messaging');
 
@@ -60,5 +60,5 @@ foreach($errorlogs as $errlog) {
         /////////////////////////////////////////////////////////////
     }
 }
-$sql = "update error_log set sendyn='y' where sendyn='n'";
+$sql = "update error_logs set sendyn='y' where sendyn='n'";
 $pdo->query($sql);
